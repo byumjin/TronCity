@@ -468,16 +468,16 @@ class ShapeManager extends Drawable
 
     //base
     if(bCross)
-    newShapes.push( new Shape(shape.symbol, geoType, shape.position, shape.rotation, vec3.fromValues( 1.0, 0.2, 1.0), false, true, shape.index));
+    newShapes.push( new Shape(shape.symbol, geoType, vec3.fromValues(shape.position[0],shape.position[1] + 1.5, shape.position[2]), shape.rotation, vec3.fromValues( 1.0, 0.2, 1.0), false, true, shape.index));
     else
-    newShapes.push( new Shape(shape.symbol, geoType, shape.position, shape.rotation, vec3.fromValues( Math.random() * 0.3 + 0.65, 0.2, 1.0), false, true, shape.index));
+    newShapes.push( new Shape(shape.symbol, geoType, vec3.fromValues(shape.position[0], shape.position[1] + 1.5, shape.position[2]), shape.rotation, vec3.fromValues( Math.random() * 0.3 + 0.65, 0.2, 1.0), false, true, shape.index));
 
     //SideLight
-    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0] - 0.3, shape.position[1] + 0.15, shape.position[2]),
-     shape.rotation, vec3.fromValues( 0.03, 0.1, 1.0), false, true, shape.index));
+    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0] - 0.3, shape.position[1] + 1.61, shape.position[2]),
+     shape.rotation, vec3.fromValues( 0.03, 0.025, 1.0), false, true, shape.index));
 
-    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0] + 0.3, shape.position[1] + 0.15, shape.position[2]),
-     shape.rotation, vec3.fromValues( 0.03, 0.1, 1.0), false, true, shape.index));
+    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0] + 0.3, shape.position[1] + 1.61, shape.position[2]),
+     shape.rotation, vec3.fromValues( 0.03, 0.025, 1.0), false, true, shape.index));
 
     return newShapes;
   }
@@ -491,16 +491,16 @@ class ShapeManager extends Drawable
 
     //base
     if(bCross)
-    newShapes.push( new Shape(shape.symbol, geoType, shape.position, shape.rotation, vec3.fromValues( 1.0, 0.2, 1.0), false, true, shape.index));
+    newShapes.push( new Shape(shape.symbol, geoType, vec3.fromValues(shape.position[0],shape.position[1] + 1.5, shape.position[2]), shape.rotation, vec3.fromValues( 1.0, 0.2, 1.0), false, true, shape.index));
     else
-    newShapes.push( new Shape(shape.symbol, geoType, shape.position, shape.rotation, vec3.fromValues( 1.0, 0.2, Math.random() * 0.3 + 0.65), false, true, shape.index));
+    newShapes.push( new Shape(shape.symbol, geoType, vec3.fromValues(shape.position[0],shape.position[1] + 1.5, shape.position[2]), shape.rotation, vec3.fromValues( 1.0, 0.2, Math.random() * 0.3 + 0.65), false, true, shape.index));
 
     //SideLight
-    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0], shape.position[1] + 0.15, shape.position[2] - 0.3),
-     shape.rotation, vec3.fromValues( 1.0, 0.1, 0.03), false, true, shape.index));
+    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0], shape.position[1] + 1.61, shape.position[2] - 0.3),
+     shape.rotation, vec3.fromValues( 1.0, 0.025, 0.03), false, true, shape.index));
 
-    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0], shape.position[1] + 0.15, shape.position[2] + 0.3),
-     shape.rotation, vec3.fromValues( 1.0, 0.1, 0.03), false, true, shape.index));
+    newShapes.push( new Shape("Road", geoType, vec3.fromValues(shape.position[0], shape.position[1] + 1.61, shape.position[2] + 0.3),
+     shape.rotation, vec3.fromValues( 1.0, 0.025, 0.03), false, true, shape.index));
 
     return newShapes;
   }
@@ -647,7 +647,7 @@ class ShapeManager extends Drawable
 
       for(var i = 0; i < max ; i++)
       {
-        newShapes.push( new Shape("Deco", OutterGeo, vec3.fromValues(shape.position[0] + offset[0], shape.position[1] + (shape.scale[1] * 0.1) * i, shape.position[2] + offset[1]), shape.rotation, vec3.fromValues(shape.scale[0] * 0.4, shape.scale[1] * 0.05, shape.scale[2] * 0.4), false, true, shape.index));
+        newShapes.push( new Shape("Deco", OutterGeo, vec3.fromValues(shape.position[0] + offset[0], shape.position[1] + (shape.scale[1] * 0.1) * i, shape.position[2] + offset[1]), shape.rotation, vec3.fromValues(shape.scale[0] * 0.4, shape.scale[1] * 0.025, shape.scale[2] * 0.4), false, true, shape.index));
       }
     }
     else if(OutterGeo == "TriCube")
@@ -656,7 +656,7 @@ class ShapeManager extends Drawable
 
       for(var i = 0; i < max ; i++)
       {
-        newShapes.push( new Shape("Deco", OutterGeo, vec3.fromValues(shape.position[0] + offset[0], shape.position[1] + (shape.scale[1] * 0.1) * i, shape.position[2]), shape.rotation, vec3.fromValues(shape.scale[0] * 0.4, shape.scale[1] * 0.05, shape.scale[2] * 0.4), false, true, shape.index));
+        newShapes.push( new Shape("Deco", OutterGeo, vec3.fromValues(shape.position[0] + offset[0], shape.position[1] + (shape.scale[1] * 0.1) * i, shape.position[2]), shape.rotation, vec3.fromValues(shape.scale[0] * 0.4, shape.scale[1] * 0.025, shape.scale[2] * 0.4), false, true, shape.index));
       }
     }
     return newShapes;  

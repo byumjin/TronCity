@@ -143,8 +143,16 @@ void main()
                 ttt = texture(u_NoiseMap, fs_Uv + vec2(-time*Noise + seed, 0.0));
             
 
-            out_Col = vec4(fs_Col.xyz * (0.5 + ttt.z), 1.0);
+            out_Col = vec4( (fs_Col.xyz * (0.5 + ttt.z)) * 1.5, 1.0);
         }
+
+        //Height
+        vec4 fogColor = vec4( 0.40392, 0.94509, 0.98, 1.0) * 0.3;
+
+
+        float alpha = clamp((2.0 - fs_Pos.y) * 0.5, 0.0, 1.0);
+
         
-        out_Col = clamp(out_Col, 0.0, 1.0);        
+        out_Col = mix(clamp(out_Col, 0.0, 1.0), fogColor, alpha);
+        out_Col.w = 1.0;     
 }

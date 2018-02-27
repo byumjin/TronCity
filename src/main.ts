@@ -42,7 +42,7 @@ import * as OBJ from 'webgl-obj-loader';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   Iteration: 4,
-  MapSize: 46,
+  MapSize: 48,
   DensePopulationCap:0.7,
 };
 
@@ -81,6 +81,11 @@ let oldTime : number;
 let currentTime : number;
 let elapsedTime : number;
 let deltaTime : number;
+
+let prevFractTime : number = 0;
+let randPeriodScale: number = 1;
+
+let randomSkyUV : vec4;
 
 let MeshManager : Array<string> = [];
 
@@ -247,6 +252,7 @@ function main() {
   triangularScreen = new Triangular(vec3.fromValues(0, 0, 0));
   triangularScreen.create();
   triangularScreen.bindTexture("src/textures/envMap.jpg");
+  triangularScreen.bindTexture01("src/textures/lightning_freq.jpg")
 
 
   const camera = new Camera(vec3.fromValues(24, 12, 24), vec3.fromValues(0, 0, 0));
@@ -278,6 +284,8 @@ function main() {
   backGroundShader = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/screenspace-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/background-frag.glsl')), ]);
+
+  randomSkyUV = vec4.create();
     
   renderer.setClearColor(0.0, 0.0, 0.0, 1);
 
@@ -296,6 +304,14 @@ function main() {
   {
     updateTime();
 
+    var period = Math.floor(elapsedTime * 0.005);
+    if( prevFractTime < period )
+    {
+      randPeriodScale = (Math.random()*3.0 + 2.0);
+      prevFractTime = period + randPeriodScale;
+      randomSkyUV = vec4.fromValues(Math.random(), Math.random() * 0.5, Math.random(), Math.random()* 0.5);
+    }
+
     camera.update();
 
     stats.begin();
@@ -305,7 +321,8 @@ function main() {
     
     renderer.render(camera, lambertShader,
             [shapeManager],            
-            vec2.fromValues(elapsedTime * 0.001, controls.MapSize)
+            vec2.fromValues(elapsedTime * 0.001, controls.MapSize),
+            randomSkyUV
         );
 
         gl.enable(gl.CULL_FACE);
@@ -313,14 +330,16 @@ function main() {
 
     renderer.render(camera, solarShader,
       [floor],
-      vec2.fromValues(elapsedTime * 0.001, controls.MapSize)
+      vec2.fromValues(elapsedTime * 0.001, controls.MapSize),
+      randomSkyUV
     );
 
     gl.disable(gl.CULL_FACE);
     
     renderer.render(camera, backGroundShader,
       [triangularScreen],
-      vec2.fromValues(elapsedTime * 0.001, controls.MapSize)
+      vec2.fromValues(elapsedTime * 0.001, controls.MapSize),
+      randomSkyUV
     );
 
     

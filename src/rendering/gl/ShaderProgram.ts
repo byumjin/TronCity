@@ -39,6 +39,8 @@ class ShaderProgram {
   unifL02Color: WebGLUniformLocation;
 
   unifTimeInfo : WebGLUniformLocation;
+  unifSkyUVInfo : WebGLUniformLocation;
+
 
   unifWind : WebGLUniformLocation;
 
@@ -69,6 +71,7 @@ class ShaderProgram {
     this.unifCameraPos = gl.getUniformLocation(this.prog, "u_CameraPos");
 
     this.unifTimeInfo = gl.getUniformLocation(this.prog, "u_TimeInfo");
+    this.unifSkyUVInfo = gl.getUniformLocation(this.prog, "u_SkyUVInfo");
 
     this.unifDiffuseMap = gl.getUniformLocation(this.prog, "u_DiffuseMap");
     this.unifNoiseMap = gl.getUniformLocation(this.prog, "u_NoiseMap");
@@ -121,6 +124,13 @@ class ShaderProgram {
     this.use();
     if (this.unifTimeInfo != -1) {
       gl.uniform2fv(this.unifTimeInfo, info);
+    }
+  }
+
+  setSkyUVInfo(info: vec4) {
+    this.use();
+    if (this.unifSkyUVInfo != -1) {
+      gl.uniform4fv(this.unifSkyUVInfo, info);
     }
   }
 

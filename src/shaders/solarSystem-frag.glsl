@@ -119,11 +119,15 @@ void main()
 
     alpha = pow(alpha, 3.0);
 
+    vec4 fogColor = vec4( 0.40392, 0.94509, 0.98, 1.0) * 0.3;
+
     out_Col = mix(DiffuseMap * 0.8, DiffuseMap * noise01.x * noise02.y * noise03.y * noise04.y, alpha);
+    out_Col = mix( fogColor * 0.8, out_Col, alpha * alpha);
+
     out_Col += vec4(SpecularColor * specularTerm, 0.0) * (1.0 - alpha) * 0.01;
 
     float fog = clamp( (1.0 - depth / 2000.0), 0.0, 1.0);
-    vec4 fogColor = vec4( 0.40392, 0.94509, 0.98, 1.0) * 0.3;
+   
     out_Col = mix(fogColor, out_Col, fog*fog);
     
     out_Col.w = 1.0;

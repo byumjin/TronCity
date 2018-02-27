@@ -22,7 +22,7 @@ class OpenGLRenderer {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
-  render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>, timeInfo: vec2) {
+  render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>, timeInfo: vec2, skyUV: vec4) {
     
     let viewProj = mat4.create();
    
@@ -38,6 +38,7 @@ class OpenGLRenderer {
     
     prog.setCameraPos( vec4.fromValues(camera.position[0], camera.position[1], camera.position[2], 1.0));
     prog.setTimeInfo(timeInfo);
+    prog.setSkyUVInfo(skyUV);
 
 
     for (let drawable of drawables) {      

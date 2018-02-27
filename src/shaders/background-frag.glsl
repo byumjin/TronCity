@@ -13,8 +13,10 @@ uniform mat4 u_invViewProj;
 
 uniform vec4 u_Color;
 uniform sampler2D u_DiffuseMap;
+uniform sampler2D u_NoiseMap;
 
 uniform vec2 u_TimeInfo;
+uniform vec4 u_SkyUVInfo;
 uniform vec4 u_CameraPos;
 
 in vec4 fs_Pos;
@@ -44,7 +46,28 @@ void main()
    vec4 worldPos = u_invViewProj * vec4( fs_Pos.xyz, 1 );
    worldPos /= worldPos.w;
 
-   out_Col = texture( u_DiffuseMap, getEnvMapUV(normalize(worldPos.xyz - u_CameraPos.xyz)));
+   vec3 reflecVec = normalize(worldPos.xyz - u_CameraPos.xyz);
+   vec2 uv = getEnvMapUV(reflecVec);
+
+   vec4 thunderPos = u_invViewProj * vec4( u_SkyUVInfo.x * 2.0 - 1.0, (1.0 - u_SkyUVInfo.y) * 2.0 - 1.0, fs_Pos.z, 1 );
+   thunderPos /= thunderPos.w;
+
+   vec3 reflecThunderVec = normalize(thunderPos.xyz - u_CameraPos.xyz);
+   vec2 thunderUV = getEnvMapUV(reflecThunderVec);
+
+   vec4 noiseInfo = texture(u_NoiseMap, vec2(u_TimeInfo.x * 0.6, 0));
+   
+   float Intensity = noiseInfo.z;
+
+   vec4 noiseInfo2 = texture(u_NoiseMap, vec2(-u_TimeInfo.x * 0.6 * 0.3756241, 0));
+
+   Intensity *= noiseInfo2.y;
+   
+
+   float radius = (noiseInfo.x + 1.0);
+   radius = pow(radius, 5.0);
+   
+   out_Col = texture( u_DiffuseMap, uv) * max( pow(clamp(dot(reflecVec, reflecThunderVec), 0.0, 1.0), radius) * (texture(u_NoiseMap, uv).x + 0.5), 0.6) * (1.0 + Intensity);
     
    out_Col.w = 1.0;
 }
