@@ -67,7 +67,7 @@ void main()
    float radius = (noiseInfo.x + 1.0);
    radius = pow(radius, 5.0);
    
-   out_Col = texture( u_DiffuseMap, uv) * max( pow(clamp(dot(reflecVec, reflecThunderVec), 0.0, 1.0), radius) * (texture(u_NoiseMap, uv).x + 0.5), 0.6) * (1.0 + Intensity);
+   out_Col = texture( u_DiffuseMap, uv) * max( pow(clamp(dot(reflecVec, reflecThunderVec), 0.0, 1.0), radius) * (texture(u_NoiseMap, uv).x + 0.5), 0.6) * (1.4 + Intensity);
     
    out_Col.w = 1.0;
 }

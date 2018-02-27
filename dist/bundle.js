@@ -3620,7 +3620,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
     Iteration: 4,
-    MapSize: 48,
+    MapSize: 50,
     DensePopulationCap: 0.7,
 };
 let icosphere;
@@ -3759,7 +3759,7 @@ function main() {
     triangularScreen.create();
     triangularScreen.bindTexture("src/textures/envMap.jpg");
     triangularScreen.bindTexture01("src/textures/lightning_freq.jpg");
-    const camera = new __WEBPACK_IMPORTED_MODULE_22__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec3 */].fromValues(24, 12, 24), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec3 */].fromValues(0, 0, 0));
+    const camera = new __WEBPACK_IMPORTED_MODULE_22__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec3 */].fromValues(-24, 10, -24), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec3 */].fromValues(0, 0, 0));
     const renderer = new __WEBPACK_IMPORTED_MODULE_21__rendering_gl_OpenGLRenderer__["a" /* default */](canvas);
     gl.enable(gl.DEPTH_TEST);
     let lambertShader;
@@ -14550,6 +14550,7 @@ class Camera {
             eye: position,
             center: target,
         });
+        this.controls.mode = 'turntable';
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec3 */].add(this.target, this.position, this.direction);
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["b" /* mat4 */].lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
     }
@@ -17771,7 +17772,7 @@ module.exports = "#version 300 es\r\n\r\nprecision highp float;\r\n\r\nin vec4 v
 /* 89 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\r\n\r\nprecision highp float;\r\n\r\n#define PI 3.1415926535897932384626422832795028841971\r\n#define TwoPi 6.28318530717958647692\r\n#define InvPi 0.31830988618379067154\r\n#define Inv2Pi 0.15915494309189533577\r\n#define Inv4Pi 0.07957747154594766788\r\n\r\nuniform mat4 u_Model;\r\nuniform mat4 u_invViewProj;\r\n\r\nuniform vec4 u_Color;\r\nuniform sampler2D u_DiffuseMap;\r\nuniform sampler2D u_NoiseMap;\r\n\r\nuniform vec2 u_TimeInfo;\r\nuniform vec4 u_SkyUVInfo;\r\nuniform vec4 u_CameraPos;\r\n\r\nin vec4 fs_Pos;\r\nin vec2 fs_Uv;\r\n\r\nout vec4 out_Col; \r\n\r\n\r\nfloat SphericalTheta(vec3 v)\r\n{\r\n\treturn acos(clamp(v.y, -1.0f, 1.0f));\r\n}\r\n\r\nfloat SphericalPhi(vec3 v)\r\n{\r\n\tfloat p = atan(v.z , v.x);\r\n\treturn (p < 0.0f) ? (p + TwoPi) : p;\r\n}\r\n\r\nvec2 getEnvMapUV(vec3 reflectionVec)\r\n{\r\n    return vec2(SphericalPhi(reflectionVec) * Inv2Pi, SphericalTheta(reflectionVec) * InvPi);\r\n}\r\n\r\nvoid main()\r\n{\r\n   vec4 worldPos = u_invViewProj * vec4( fs_Pos.xyz, 1 );\r\n   worldPos /= worldPos.w;\r\n\r\n   vec3 reflecVec = normalize(worldPos.xyz - u_CameraPos.xyz);\r\n   vec2 uv = getEnvMapUV(reflecVec);\r\n\r\n   vec4 thunderPos = u_invViewProj * vec4( u_SkyUVInfo.x * 2.0 - 1.0, (1.0 - u_SkyUVInfo.y) * 2.0 - 1.0, fs_Pos.z, 1 );\r\n   thunderPos /= thunderPos.w;\r\n\r\n   vec3 reflecThunderVec = normalize(thunderPos.xyz - u_CameraPos.xyz);\r\n   vec2 thunderUV = getEnvMapUV(reflecThunderVec);\r\n\r\n   vec4 noiseInfo = texture(u_NoiseMap, vec2(u_TimeInfo.x * 0.6, 0));\r\n   \r\n   float Intensity = noiseInfo.z;\r\n\r\n   vec4 noiseInfo2 = texture(u_NoiseMap, vec2(-u_TimeInfo.x * 0.6 * 0.3756241, 0));\r\n\r\n   Intensity *= noiseInfo2.y;\r\n   \r\n\r\n   float radius = (noiseInfo.x + 1.0);\r\n   radius = pow(radius, 5.0);\r\n   \r\n   out_Col = texture( u_DiffuseMap, uv) * max( pow(clamp(dot(reflecVec, reflecThunderVec), 0.0, 1.0), radius) * (texture(u_NoiseMap, uv).x + 0.5), 0.6) * (1.0 + Intensity);\r\n    \r\n   out_Col.w = 1.0;\r\n}\r\n"
+module.exports = "#version 300 es\r\n\r\nprecision highp float;\r\n\r\n#define PI 3.1415926535897932384626422832795028841971\r\n#define TwoPi 6.28318530717958647692\r\n#define InvPi 0.31830988618379067154\r\n#define Inv2Pi 0.15915494309189533577\r\n#define Inv4Pi 0.07957747154594766788\r\n\r\nuniform mat4 u_Model;\r\nuniform mat4 u_invViewProj;\r\n\r\nuniform vec4 u_Color;\r\nuniform sampler2D u_DiffuseMap;\r\nuniform sampler2D u_NoiseMap;\r\n\r\nuniform vec2 u_TimeInfo;\r\nuniform vec4 u_SkyUVInfo;\r\nuniform vec4 u_CameraPos;\r\n\r\nin vec4 fs_Pos;\r\nin vec2 fs_Uv;\r\n\r\nout vec4 out_Col; \r\n\r\n\r\nfloat SphericalTheta(vec3 v)\r\n{\r\n\treturn acos(clamp(v.y, -1.0f, 1.0f));\r\n}\r\n\r\nfloat SphericalPhi(vec3 v)\r\n{\r\n\tfloat p = atan(v.z , v.x);\r\n\treturn (p < 0.0f) ? (p + TwoPi) : p;\r\n}\r\n\r\nvec2 getEnvMapUV(vec3 reflectionVec)\r\n{\r\n    return vec2(SphericalPhi(reflectionVec) * Inv2Pi, SphericalTheta(reflectionVec) * InvPi);\r\n}\r\n\r\nvoid main()\r\n{\r\n   vec4 worldPos = u_invViewProj * vec4( fs_Pos.xyz, 1 );\r\n   worldPos /= worldPos.w;\r\n\r\n   vec3 reflecVec = normalize(worldPos.xyz - u_CameraPos.xyz);\r\n   vec2 uv = getEnvMapUV(reflecVec);\r\n\r\n   vec4 thunderPos = u_invViewProj * vec4( u_SkyUVInfo.x * 2.0 - 1.0, (1.0 - u_SkyUVInfo.y) * 2.0 - 1.0, fs_Pos.z, 1 );\r\n   thunderPos /= thunderPos.w;\r\n\r\n   vec3 reflecThunderVec = normalize(thunderPos.xyz - u_CameraPos.xyz);\r\n   vec2 thunderUV = getEnvMapUV(reflecThunderVec);\r\n\r\n   vec4 noiseInfo = texture(u_NoiseMap, vec2(u_TimeInfo.x * 0.6, 0));\r\n   \r\n   float Intensity = noiseInfo.z;\r\n\r\n   vec4 noiseInfo2 = texture(u_NoiseMap, vec2(-u_TimeInfo.x * 0.6 * 0.3756241, 0));\r\n\r\n   Intensity *= noiseInfo2.y;\r\n   \r\n\r\n   float radius = (noiseInfo.x + 1.0);\r\n   radius = pow(radius, 5.0);\r\n   \r\n   out_Col = texture( u_DiffuseMap, uv) * max( pow(clamp(dot(reflecVec, reflecThunderVec), 0.0, 1.0), radius) * (texture(u_NoiseMap, uv).x + 0.5), 0.6) * (1.4 + Intensity);\r\n    \r\n   out_Col.w = 1.0;\r\n}\r\n"
 
 /***/ })
 /******/ ]);

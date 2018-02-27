@@ -42,7 +42,7 @@ import * as OBJ from 'webgl-obj-loader';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   Iteration: 4,
-  MapSize: 48,
+  MapSize: 50,
   DensePopulationCap:0.7,
 };
 
@@ -255,7 +255,7 @@ function main() {
   triangularScreen.bindTexture01("src/textures/lightning_freq.jpg")
 
 
-  const camera = new Camera(vec3.fromValues(24, 12, 24), vec3.fromValues(0, 0, 0));
+  const camera = new Camera(vec3.fromValues(-24, 10, -24), vec3.fromValues(0, 0, 0));
   const renderer = new OpenGLRenderer(canvas);
   gl.enable(gl.DEPTH_TEST);
 
