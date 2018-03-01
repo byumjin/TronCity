@@ -7,12 +7,12 @@
 
 ## Live Demo
 
-[![](imgs/main.png)](https://byumjin.github.io/TronCity/)
+[![](imgs/troncity.gif)](https://byumjin.github.io/TronCity/)
 
 * [WebGL Link](https://byumjin.github.io/TronCity/)
 
-Volume up!
-It may take a few seconds to create thousands buildings.
+- Volume up!
+- It may take a few seconds to create thousands buildings.
 
 
 ### GUI
